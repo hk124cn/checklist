@@ -141,6 +141,22 @@
     .actions button:active { transform: scale(.97); }
     .hint { color: var(--muted); font-size: 12px; margin: 16px 4px 0; line-height: 1.6; }
 
+    .sched-row { display: flex; gap: 8px; align-items: center; margin: -6px 0 16px; flex-wrap: wrap; }
+    .sched-select { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; }
+    .wd-group { display: flex; gap: 4px; }
+    .wd { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 13px; cursor: pointer; }
+    .wd.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .sched-date { padding: 9px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; }
+    .review-banner { display: none; align-items: center; justify-content: space-between; gap: 10px; background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; }
+    .review-banner.show { display: flex; }
+    .review-label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .review-nav { display: flex; gap: 6px; }
+    .review-nav button { padding: 6px 12px; border-radius: 9px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; cursor: pointer; }
+    .review-nav button:active { transform: scale(.95); }
+    .day { cursor: pointer; }
+    .day.active .dot { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .tag.sched { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
     .toast {
       position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%) translateY(20px);
       background: var(--text); color: var(--bg); padding: 12px 20px; border-radius: 99px;
@@ -164,9 +180,18 @@
       <span id="suggestText"></span>
     </div>
 
+    <div class="review-banner" id="reviewBanner">
+      <span class="review-label" id="reviewLabel"></span>
+      <div class="review-nav">
+        <button id="prevDay" title="前一天">‹</button>
+        <button id="backToday">今天</button>
+        <button id="nextDay" title="后一天">›</button>
+      </div>
+    </div>
+
     <div class="progress-card">
       <div class="progress-top">
-        <div class="count">今日已完成 <b id="doneCount">0</b> / <span id="totalCount">0</span></div>
+        <div class="count"><span id="progressLabel">今日已完成</span> <b id="doneCount">0</b> / <span id="totalCount">0</span></div>
         <div class="count" id="pctText">0%</div>
       </div>
       <div class="bar"><i id="barFill"></i></div>
@@ -178,6 +203,24 @@
       <input type="text" id="newCat" class="cat" list="catList" placeholder="分组" maxlength="12" />
       <datalist id="catList"></datalist>
       <button id="addBtn">添加</button>
+    </div>
+
+    <div class="sched-row">
+      <select id="newSched" class="sched-select">
+        <option value="everyday">每天</option>
+        <option value="weekdays">每周几</option>
+        <option value="dates">指定日期</option>
+      </select>
+      <div id="schedWeekdays" class="wd-group" hidden>
+        <button type="button" class="wd" data-dow="0">日</button>
+        <button type="button" class="wd" data-dow="1">一</button>
+        <button type="button" class="wd" data-dow="2">二</button>
+        <button type="button" class="wd" data-dow="3">三</button>
+        <button type="button" class="wd" data-dow="4">四</button>
+        <button type="button" class="wd" data-dow="5">五</button>
+        <button type="button" class="wd" data-dow="6">六</button>
+      </div>
+      <input type="date" id="schedDate" class="sched-date" hidden />
     </div>
 
     <div id="groups"></div>
