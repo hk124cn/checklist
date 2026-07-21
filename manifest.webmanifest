@@ -1,0 +1,19 @@
+{
+  "name": "每日完成清单",
+  "short_name": "完成清单",
+  "description": "每天要做的事，做了打勾，没做也能一眼看到。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3f5f7",
+  "theme_color": "#22c55e",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
