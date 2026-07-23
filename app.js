@@ -471,7 +471,18 @@
   // PWA service worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
+      navigator.serviceWorker.register('./sw.js').then(function (reg) {
+        reg.addEventListener('updatefound', function () {
+          var nw = reg.installing;
+          nw.addEventListener('statechange', function () {
+            // 发现新版本（说明 Cloudflare 已部署更新）且当前已有旧控制器，自动刷新到新版
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              toast('已更新到新版本，正在刷新…');
+              setTimeout(function () { location.reload(); }, 1200);
+            }
+          });
+        });
+      }).catch(function () {});
     });
   }
 })();

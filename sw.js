@@ -1,4 +1,4 @@
-const CACHE = 'checklist-v1';
+const CACHE = 'checklist-v2';
 const ASSETS = ['./', './index.html', './app.js', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', (e) => {
@@ -17,18 +17,17 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // 网络优先：每次都先尝试拉取最新文件，保证 Cloudflare 部署后手机能立即看到更新；
+  // 仅在断网时回退到本地缓存，保证离线可用。
   e.respondWith(
-    caches.match(e.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(e.request)
-        .then((resp) => {
-          if (resp.ok && resp.type === 'basic') {
-            const copy = resp.clone();
-            caches.open(CACHE).then((c) => c.put(e.request, copy));
-          }
-          return resp;
-        })
-        .catch(() => cached);
-    })
+    fetch(e.request)
+      .then((resp) => {
+        if (resp.ok && resp.type === 'basic') {
+          const copy = resp.clone();
+          caches.open(CACHE).then((c) => c.put(e.request, copy));
+        }
+        return resp;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
